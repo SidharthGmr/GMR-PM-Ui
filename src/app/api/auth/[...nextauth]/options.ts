@@ -165,6 +165,6 @@ export const authOptions: NextAuthOptions = {
   // Enable debug messages in the console if you are having problems
   debug: config.enviroment !== 'production',
   pages: {
-    signIn: '/login',
+    signIn: '/',
   },
 };

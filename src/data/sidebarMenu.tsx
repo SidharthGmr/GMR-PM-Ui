@@ -91,6 +91,14 @@ export const SideBarMenu: SideBarMenuDto[] = [
     role: [Roles.ADMIN],
     isActive: false,
   },
+  {
+    id: 'brand-names',
+    title: 'Brand Names',
+    icon: MdList,
+    url: '/admin/brand-names/',
+    role: [Roles.ADMIN],
+    isActive: false,
+  },
   // {
   //     id: "newsletter",
   //     title: "Newsletter",

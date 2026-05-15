@@ -10,6 +10,7 @@ import ICategoryService from './ICategoryService';
 import IProductVariantService from './IProductVariantService';
 import IProductAttributeService from './IProductAttributeService';
 import IAttributeService from './IAttributeService';
+import IBrandNameService from './IBrandNameService';
 
 export default interface IUnitOfService {
   HttpService: IHttpService;
@@ -24,4 +25,5 @@ export default interface IUnitOfService {
   ProductVariantService: IProductVariantService;
   ProductAttributeService: IProductAttributeService;
   AttributeService: IAttributeService;
+  BrandNameService: IBrandNameService;
 }

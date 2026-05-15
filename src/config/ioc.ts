@@ -30,6 +30,8 @@ import IProductAttributeService from '@/services/interfaces/IProductAttributeSer
 import ProductAttributeService from '@/services/ProductAttributeService';
 import IAttributeService from '@/services/interfaces/IAttributeService';
 import AttributeService from '@/services/AttributeService';
+import IBrandNameService from '@/services/interfaces/IBrandNameService';
+import BrandNameService from '@/services/BrandNameService';
 
 const container = new Container();
 
@@ -46,5 +48,6 @@ container.bind<ICategoryService>(TYPES.ICategoryService).to(CategoryService);
 container.bind<IProductVariantService>(TYPES.IProductVariantService).to(ProductVariantService);
 container.bind<IProductAttributeService>(TYPES.IProductAttributeService).to(ProductAttributeService);
 container.bind<IAttributeService>(TYPES.IAttributeService).to(AttributeService);
+container.bind<IBrandNameService>(TYPES.IBrandNameService).to(BrandNameService);
 
 export { container };
