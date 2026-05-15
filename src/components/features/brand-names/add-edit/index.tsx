@@ -14,7 +14,9 @@ import { CreateBrandNameModel } from '@/models/brand-name.model';
 import BrandNameSchema from '@/schema/brandNameSchema';
 import { useCreateBrandName, useGetBrandNameById, useUpdateBrandName } from '@/hooks/service-hooks/useBrandNameService';
 import { SelectSearch } from '@/components/common/select-search';
+import { SelectSearchMulti } from '@/components/common/select-search-multi';
 import { StatusValues } from '@/enums/status-values.enum';
+import { useGetAllCategories } from '@/hooks/service-hooks/useCategoryService';
 
 interface ManageBrandNameProps {
   id?: number;
@@ -25,20 +27,20 @@ interface ManageBrandNameProps {
 export default function ManageBrandName({ id, isOpen, onClose }: ManageBrandNameProps) {
   const unitOfService = container.get<IUnitOfService>(TYPES.IUnitOfService);
   const isEdit = !!id && id > 0;
-
+  const getAllCategories = useGetAllCategories();
   const createMutation = useCreateBrandName();
   const updateMutation = useUpdateBrandName();
   const { data: brandNameResponse, isLoading: isFetching } = useGetBrandNameById(id ?? 0, isEdit);
 
   const form = useForm<CreateBrandNameModel>({
     resolver: yupResolver(BrandNameSchema),
-    defaultValues: { brandName: '', status: StatusValues.Published, displayOrder: 0 },
+    defaultValues: { brandName: '', status: StatusValues.Published, displayOrder: 0, categoryIds: [] },
   });
 
   useEffect(() => {
     if (isEdit && brandNameResponse?.data?.data) {
       const b = brandNameResponse.data.data;
-      form.reset({ brandName: b.brandName, status: b.status, displayOrder: b.displayOrder ?? 0 });
+      form.reset({ brandName: b.brandName, status: b.status, displayOrder: b.displayOrder ?? 0, categoryIds: b.categoryId ? [b.categoryId] : [] });
     }
   }, [isEdit, brandNameResponse, form]);
 
@@ -60,11 +62,35 @@ export default function ManageBrandName({ id, isOpen, onClose }: ManageBrandName
     <Dialog open={isOpen} onOpenChange={() => onClose(false)}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{isEdit ? 'Edit Brand Name' : 'Add Brand Name'}</DialogTitle>
+          <DialogTitle>{isEdit ? 'Edit' : 'Add'} Brand Name</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
           <form autoComplete="off" onSubmit={form.handleSubmit(submitData)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="categoryIds"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Select Category ID</FormLabel>
+                  <FormControl>
+                    <SelectSearchMulti
+                      buttonClass={`w-full`}
+                      placeholder="Select Category"
+                      items={
+                        getAllCategories?.data?.data?.data?.data?.map((item) => ({
+                          value: item.id,
+                          label: item.name,
+                        })) ?? []
+                      }
+                      value={field.value ?? []}
+                      onChange={(values) => field.onChange(values.map(Number))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="brandName"
