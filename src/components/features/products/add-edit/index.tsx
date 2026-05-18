@@ -1,11 +1,10 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from '@/components/ui/use-toast';
 import { container } from '@/config/ioc';
@@ -16,6 +15,9 @@ import ProductSchema from '@/schema/productSchema';
 import { useCreateProduct, useGetProductById, useUpdateProduct } from '@/hooks/service-hooks/useProductService';
 import { SelectSearch } from '@/components/common/select-search';
 import { useGetAllCategories } from '@/hooks/service-hooks/useCategoryService';
+import { useGetAllBrandNames } from '@/hooks/service-hooks/useBrandNameService';
+import useGetCurrentUser from '@/hooks/useGetCurrentUser';
+import StatusData from '@/data/status.data';
 
 interface ManageProductProps {
   id?: number;
@@ -28,6 +30,9 @@ export default function ManageProduct({ id, isOpen, onClose }: ManageProductProp
   const isEdit = !!id && id > 0;
 
   const getAllCategories = useGetAllCategories();
+  const getAllBrandNames = useGetAllBrandNames();
+
+  const { currentUser } = useGetCurrentUser();
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();
   const { data: productResponse, isLoading: isFetching } = useGetProductById(id ?? 0, isEdit);
@@ -44,12 +49,22 @@ export default function ManageProduct({ id, isOpen, onClose }: ManageProductProp
       stock: 0,
       lowStockThreshold: undefined,
       categoryId: 0,
+      brandNameId: undefined,
+      storeId: undefined,
+      displayOrder: undefined,
       images: [],
-      status: true,
+      status: '',
+      createdById: 0,
     },
   });
 
   const { handleSubmit, reset, setValue, getValues } = form;
+
+  useEffect(() => {
+    if (currentUser?.id) {
+      setValue('createdById', currentUser.id);
+    }
+  }, [currentUser, setValue]);
 
   const generateSlug = (name: string) =>
     name
@@ -72,8 +87,12 @@ export default function ManageProduct({ id, isOpen, onClose }: ManageProductProp
         stock: p.stock,
         lowStockThreshold: p.lowStockThreshold ?? undefined,
         categoryId: p.categoryId,
+        brandNameId: p.brandNameId ?? undefined,
+        storeId: p.storeId ?? undefined,
+        displayOrder: p.displayOrder ?? undefined,
         images: p.images ?? [],
         status: p.status,
+        createdById: p.createdById,
       });
     }
   }, [isEdit, productResponse, reset]);
@@ -265,6 +284,54 @@ export default function ManageProduct({ id, isOpen, onClose }: ManageProductProp
               )}
             />
 
+            {/* Brand Name */}
+            <FormField
+              control={form.control}
+              name="brandNameId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Brand Name</FormLabel>
+                  <FormControl>
+                    <SelectSearch
+                      buttonClass="w-full"
+                      placeholder="Select Brand"
+                      disableSearch={false}
+                      items={
+                        getAllBrandNames?.data?.data?.data?.data?.map((item) => ({
+                          value: item.id,
+                          label: item.brandName, // ← was item.name
+                        })) ?? []
+                      }
+                      value={field.value ?? ''}
+                      onChange={(value) => field.onChange(value ? Number(value) : undefined)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Display Order */}
+            <FormField
+              control={form.control}
+              name="displayOrder"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display Order</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="e.g. 1"
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={(e) => field.onChange(e.target.value === '' ? undefined : +e.target.value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             {/* Description — full width */}
             <div className="md:col-span-2">
               <FormField
@@ -279,6 +346,7 @@ export default function ManageProduct({ id, isOpen, onClose }: ManageProductProp
                         placeholder="Product description..."
                         className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 resize-none"
                         {...field}
+                        value={field.value ?? ''}
                       />
                     </FormControl>
                     <FormMessage />
@@ -287,22 +355,27 @@ export default function ManageProduct({ id, isOpen, onClose }: ManageProductProp
               />
             </div>
 
-            {/* Is Active */}
-            <div className="md:col-span-2">
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem className="flex items-center gap-3">
-                    <FormLabel className="mt-2">Active</FormLabel>
-                    <FormControl>
-                      <Switch checked={field.value ?? true} onCheckedChange={field.onChange} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            {/* Status */}
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <FormControl>
+                    <SelectSearch
+                      buttonClass="w-full"
+                      placeholder="Select Status"
+                      disableSearch={true}
+                      items={StatusData.map((s) => ({ value: s.value, label: s.label }))}
+                      value={field.value ?? ''}
+                      onChange={(value) => field.onChange(value ?? '')}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             {/* Actions */}
             <div className="md:col-span-2 flex justify-end gap-2 pt-2">

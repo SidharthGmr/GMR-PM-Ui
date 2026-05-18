@@ -1,6 +1,6 @@
 import { container } from '@/config/ioc';
 import { TYPES } from '@/config/types';
-import { CreateBrandNameModel, UpdateBrandNameModel } from '@/models/brand-name.model';
+import { CreateBrandNameModel } from '@/models/brand-name.model';
 import IUnitOfService from '@/services/interfaces/IUnitOfService';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -39,7 +39,7 @@ const useGetBrandNameById = (id: number | string, enabled: boolean = true) => {
     });
 };
 
-type UpdateBrandNameArgs = { id: number | string; model: UpdateBrandNameModel };
+type UpdateBrandNameArgs = { id: number | string; model: CreateBrandNameModel };
 
 const useUpdateBrandName = () => {
     const unitOfService = container.get<IUnitOfService>(TYPES.IUnitOfService);

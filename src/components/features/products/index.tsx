@@ -20,6 +20,7 @@ import { useProductColumns } from './columns';
 import ProductListFilter from './filter';
 import ManageProduct from './add-edit';
 import config from '@/config';
+import { useGetAllBrandNames } from '@/hooks/service-hooks/useBrandNameService';
 
 export default function ProductList() {
   const unitOfService = container.get<IUnitOfService>(TYPES.IUnitOfService);
@@ -55,8 +56,6 @@ export default function ProductList() {
       setRecordCount(getAllProductsResponse.data.data.data.totalRecord ?? 0);
     }
   }, [getAllProductsResponse.isSuccess, getAllProductsResponse.data]);
-
-  console.log('filterParams', data);
 
   const { sorting, onSortingChange } = useTanstackTableSorting<ProductDto>('', 'desc', columns);
 
