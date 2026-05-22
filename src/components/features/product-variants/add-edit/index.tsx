@@ -17,6 +17,9 @@ import { useCreateProductVariant, useGetProductVariantById, useUpdateProductVari
 import { useGetAllProducts } from '@/hooks/service-hooks/useProductService';
 import { SelectSearch } from '@/components/common/select-search';
 import Loader from '@/components/loader';
+import { StatusValues } from '@/enums/status-values.enum';
+import { useGetAllBrandNames } from '@/hooks/service-hooks/useBrandNameService';
+import { useGetAllProductAttributes } from '@/hooks/service-hooks/useProductAttributeService';
 
 interface ManageProductVariantProps {
   id?: number;
@@ -29,6 +32,8 @@ export default function ManageProductVariant({ id, defaultProductId, isOpen, onC
   const unitOfService = container.get<IUnitOfService>(TYPES.IUnitOfService);
   const isEdit = !!id && id > 0;
 
+  const getAllProductAttributes = useGetAllProductAttributes();
+  const getAllBrandNames = useGetAllBrandNames();
   const getAllProducts = useGetAllProducts();
   const createVariant = useCreateProductVariant();
   const updateVariant = useUpdateProductVariant();
@@ -38,6 +43,7 @@ export default function ManageProductVariant({ id, defaultProductId, isOpen, onC
     resolver: yupResolver(ProductVariantSchema),
     defaultValues: {
       productId: defaultProductId ?? 0,
+      brandName: '',
       size: '',
       material: '',
       voltage: '',
@@ -46,6 +52,8 @@ export default function ManageProductVariant({ id, defaultProductId, isOpen, onC
       extraPrice: undefined,
       stock: 0,
       isDefault: false,
+      status: StatusValues.Published,
+      displayOrder: 0,
     },
   });
 
@@ -54,6 +62,7 @@ export default function ManageProductVariant({ id, defaultProductId, isOpen, onC
       const v = variantResponse.data.data;
       form.reset({
         productId: v.productId,
+        brandName: v.brandName ?? '',
         size: v.size ?? '',
         material: v.material ?? '',
         voltage: v.voltage ?? '',
@@ -62,6 +71,8 @@ export default function ManageProductVariant({ id, defaultProductId, isOpen, onC
         extraPrice: v.extraPrice ?? undefined,
         stock: v.stock,
         isDefault: v.isDefault,
+        status: v.status,
+        displayOrder: v.displayOrder ?? 0,
       });
     }
   }, [isEdit, variantResponse, form]);
@@ -118,8 +129,60 @@ export default function ManageProductVariant({ id, defaultProductId, isOpen, onC
               )}
             />
 
-            {/* Size */}
             <FormField
+              control={form.control}
+              name="brandName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Brand Name</FormLabel>
+                  <FormControl>
+                    <SelectSearch
+                      buttonClass="w-full"
+                      placeholder="Select Brand"
+                      disableSearch={false}
+                      items={
+                        getAllBrandNames?.data?.data?.data?.data?.map((item) => ({
+                          value: item.id,
+                          label: item.brandName,
+                        })) ?? []
+                      }
+                      value={field.value ?? ''}
+                      onChange={(value) => field.onChange(value ? Number(value) : undefined)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="size"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Varient</FormLabel>
+                  <FormControl>
+                    <SelectSearch
+                      buttonClass="w-full"
+                      placeholder="Select Varient"
+                      disableSearch={false}
+                      items={
+                        getAllProductAttributes?.data?.data?.data?.data?.map((item) => ({
+                          value: item.id,
+                          label: item.value,
+                        })) ?? []
+                      }
+                      value={field.value ?? ''}
+                      onChange={(value) => field.onChange(value ? Number(value) : undefined)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Size */}
+            {/* <FormField
               control={form.control}
               name="size"
               render={({ field }) => (
@@ -131,7 +194,7 @@ export default function ManageProductVariant({ id, defaultProductId, isOpen, onC
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* Extra Price */}
             <FormField
@@ -174,6 +237,52 @@ export default function ManageProductVariant({ id, defaultProductId, isOpen, onC
               )}
             />
 
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status *</FormLabel>
+                  <FormControl>
+                    <div className="flex">
+                      <SelectSearch
+                        placeholder="Select Status*"
+                        buttonClass="w-full"
+                        disableSearch={true}
+                        items={[
+                          { label: 'Published', value: StatusValues.Published },
+                          { label: 'Draft', value: StatusValues.Draft },
+                        ]}
+                        value={field.value}
+                        valueType="string"
+                        containerName="brand-name-status"
+                        onChange={(value) => field.onChange(value)}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="displayOrder"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display Order</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="e.g. 1, 2, 3 (optional)"
+                      value={field.value ?? ''}
+                      onChange={(e) => field.onChange(e.target.value === '' ? null : +e.target.value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* Is Default */}
             <FormField
               control={form.control}

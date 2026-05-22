@@ -14,13 +14,13 @@ import { Input } from '@/components/ui/input';
 import { useRoleRedirect } from '@/hooks/use-role-base-redirection';
 import { UserDto } from '@/dtos/UserDto';
 import { FaArrowUpRightFromSquare } from 'react-icons/fa6';
+import { CardDescription } from '../ui/card';
 
 export default function LoginModule() {
   const { data: session, status } = useSession();
   const { redirectToRoleBasedDashboard } = useRoleRedirect();
   const router = useRouter();
   const [showLoader, setShowLoader] = useState<boolean>(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
 
   const form = useForm<LoginModel>({
     resolver: yupResolver(LoginSchema),
@@ -143,43 +143,32 @@ export default function LoginModule() {
             )}
           />
 
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <Link href="/recover-password" className="text-sm font-medium text-blue-500 hover:text-blue-400 transition-colors">
               Forgot Password?
             </Link>
-          </div>
+          </div> */}
 
           <Button
             type="submit"
             icon={FaArrowUpRightFromSquare}
             iconPlacement="right"
             className="w-full transition-all duration-300 hover:scale-[1.02]"
-            disabled={showLoader}
+            loading={showLoader}
           >
             {showLoader ? 'Signing in...' : 'Sign In'}
           </Button>
         </form>
       </Form>
 
-      {/* <div className="my-4 text-center">
-        <p className="text-sm text-gray-500">
+      <div className="my-4 text-center">
+        <CardDescription>
           Don&apos;t have an account?
-          <Link href="/sign-up" className="font-medium text-blue-500 hover:text-blue-400 transition-colors">
+          <Link href="/sign-up" className="font-medium text-blue-500 hover:text-blue-400 transition-colors ms-1">
             Sign up now
           </Link>
-        </p>
-      </div> */}
-      {/* <Button
-        onClick={() => {
-          setGoogleLoading(true);
-          signIn('google', { callbackUrl: '/' });
-        }}
-        variant="outline"
-        className="w-full mt-4"
-        disabled={googleLoading}
-      >
-        {googleLoading ? 'Redirecting...' : 'Sign in with Google'}
-      </Button> */}
+        </CardDescription>
+      </div>
     </div>
   );
 }

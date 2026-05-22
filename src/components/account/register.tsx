@@ -11,6 +11,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { FaArrowUpRightFromSquare } from 'react-icons/fa6';
+import Link from 'next/link';
+import { CardDescription } from '../ui/card';
 
 export default function RegisterModule() {
   const [showLoader, setShowLoader] = useState<boolean>(false);
@@ -86,7 +88,7 @@ export default function RegisterModule() {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">First Name</FormLabel>
+                  <FormLabel>First Name</FormLabel>
                   <FormControl>
                     <Input placeholder="John" {...field} />
                   </FormControl>
@@ -99,7 +101,7 @@ export default function RegisterModule() {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">Last Name</FormLabel>
+                  <FormLabel>Last Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Doe" {...field} />
                   </FormControl>
@@ -114,7 +116,7 @@ export default function RegisterModule() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-300">Business Email</FormLabel>
+                <FormLabel>Business Email</FormLabel>
                 <FormControl>
                   <Input type="email" placeholder="name@company.com" {...field} />
                 </FormControl>
@@ -128,7 +130,7 @@ export default function RegisterModule() {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-300">Phone</FormLabel>
+                <FormLabel>Phone</FormLabel>
                 <FormControl>
                   <Input type="tel" placeholder="+1 (555) 000-0000" {...field} />
                 </FormControl>
@@ -142,7 +144,7 @@ export default function RegisterModule() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-300">Password</FormLabel>
+                <FormLabel>Password</FormLabel>
                 <FormControl>
                   <Input type="password" placeholder="Create a password" {...field} />
                 </FormControl>
@@ -155,10 +157,18 @@ export default function RegisterModule() {
             type="submit"
             icon={FaArrowUpRightFromSquare}
             className="w-full  transition-all duration-300 hover:scale-[1.02]"
-            disabled={isLoading}
+            loading={showLoader}
           >
             {isLoading ? 'Creating account...' : 'Create Account'}
           </Button>
+          <div className="my-4 text-center">
+            <CardDescription>
+              Already have an account?
+              <Link href="/login" className="font-medium text-blue-500 hover:text-blue-400 transition-colors ms-1">
+                Log in now
+              </Link>
+            </CardDescription>
+          </div>
         </form>
       </Form>
     </>

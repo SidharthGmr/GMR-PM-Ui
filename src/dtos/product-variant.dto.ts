@@ -1,6 +1,7 @@
 export interface ProductVariantDto {
     id: number;
     productId: number;
+    brandName?: string | null;
     size?: string | null;
     material?: string | null;
     voltage?: string | null;
@@ -9,4 +10,6 @@ export interface ProductVariantDto {
     extraPrice?: number | null;
     stock: number;
     isDefault: boolean;
+    status: string;
+    displayOrder?: number | null;
 }
