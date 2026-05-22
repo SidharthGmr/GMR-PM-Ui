@@ -16,6 +16,7 @@ import IProductVariantService from './interfaces/IProductVariantService';
 import IProductAttributeService from './interfaces/IProductAttributeService';
 import IAttributeService from './interfaces/IAttributeService';
 import IBrandNameService from './interfaces/IBrandNameService';
+import IDashboardService from './interfaces/IDashboardService';
 import BrandNameService from './BrandNameService';
 
 @injectable()
@@ -33,6 +34,7 @@ export default class UnitOfService implements IUnitOfService {
   public ProductAttributeService: IProductAttributeService;
   public AttributeService: IAttributeService;
   public BrandNameService: IBrandNameService;
+  public DashboardService: IDashboardService;
 
   constructor(
     httpService = container.get<IHttpService>(TYPES.IHttpService),
@@ -47,7 +49,8 @@ export default class UnitOfService implements IUnitOfService {
     productVariantService = container.get<IProductVariantService>(TYPES.IProductVariantService),
     productAttributeService = container.get<IProductAttributeService>(TYPES.IProductAttributeService),
     attributeService = container.get<IAttributeService>(TYPES.IAttributeService),
-    brandNameService = container.get<IBrandNameService>(TYPES.IBrandNameService)
+    brandNameService = container.get<IBrandNameService>(TYPES.IBrandNameService),
+    dashboardService = container.get<IDashboardService>(TYPES.IDashboardService)
   ) {
     this.HttpService = httpService;
     this.AccountService = accountService;
@@ -62,5 +65,6 @@ export default class UnitOfService implements IUnitOfService {
     this.ProductAttributeService = productAttributeService;
     this.AttributeService = attributeService;
     this.BrandNameService = brandNameService;
+    this.DashboardService = dashboardService;
   }
 }

@@ -11,6 +11,7 @@ import IProductVariantService from './IProductVariantService';
 import IProductAttributeService from './IProductAttributeService';
 import IAttributeService from './IAttributeService';
 import IBrandNameService from './IBrandNameService';
+import IDashboardService from './IDashboardService';
 
 export default interface IUnitOfService {
   HttpService: IHttpService;
@@ -26,4 +27,5 @@ export default interface IUnitOfService {
   ProductAttributeService: IProductAttributeService;
   AttributeService: IAttributeService;
   BrandNameService: IBrandNameService;
+  DashboardService: IDashboardService;
 }
