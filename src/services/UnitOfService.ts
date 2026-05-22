@@ -17,6 +17,7 @@ import IProductAttributeService from './interfaces/IProductAttributeService';
 import IAttributeService from './interfaces/IAttributeService';
 import IBrandNameService from './interfaces/IBrandNameService';
 import IDashboardService from './interfaces/IDashboardService';
+import IStaffSalaryService from './interfaces/IStaffSalaryService';
 import BrandNameService from './BrandNameService';
 
 @injectable()
@@ -35,6 +36,7 @@ export default class UnitOfService implements IUnitOfService {
   public AttributeService: IAttributeService;
   public BrandNameService: IBrandNameService;
   public DashboardService: IDashboardService;
+  public StaffSalaryService: IStaffSalaryService;
 
   constructor(
     httpService = container.get<IHttpService>(TYPES.IHttpService),
@@ -50,7 +52,8 @@ export default class UnitOfService implements IUnitOfService {
     productAttributeService = container.get<IProductAttributeService>(TYPES.IProductAttributeService),
     attributeService = container.get<IAttributeService>(TYPES.IAttributeService),
     brandNameService = container.get<IBrandNameService>(TYPES.IBrandNameService),
-    dashboardService = container.get<IDashboardService>(TYPES.IDashboardService)
+    dashboardService = container.get<IDashboardService>(TYPES.IDashboardService),
+    staffSalaryService = container.get<IStaffSalaryService>(TYPES.IStaffSalaryService)
   ) {
     this.HttpService = httpService;
     this.AccountService = accountService;
@@ -66,5 +69,6 @@ export default class UnitOfService implements IUnitOfService {
     this.AttributeService = attributeService;
     this.BrandNameService = brandNameService;
     this.DashboardService = dashboardService;
+    this.StaffSalaryService = staffSalaryService;
   }
 }

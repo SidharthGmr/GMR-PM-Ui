@@ -12,6 +12,7 @@ import IProductAttributeService from './IProductAttributeService';
 import IAttributeService from './IAttributeService';
 import IBrandNameService from './IBrandNameService';
 import IDashboardService from './IDashboardService';
+import IStaffSalaryService from './IStaffSalaryService';
 
 export default interface IUnitOfService {
   HttpService: IHttpService;
@@ -28,4 +29,5 @@ export default interface IUnitOfService {
   AttributeService: IAttributeService;
   BrandNameService: IBrandNameService;
   DashboardService: IDashboardService;
+  StaffSalaryService: IStaffSalaryService;
 }
