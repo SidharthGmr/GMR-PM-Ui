@@ -36,6 +36,8 @@ import IDashboardService from '@/services/interfaces/IDashboardService';
 import DashboardService from '@/services/DashboardService';
 import IStaffSalaryService from '@/services/interfaces/IStaffSalaryService';
 import StaffSalaryService from '@/services/StaffSalaryService';
+import IStaffService from '@/services/interfaces/IStaffService';
+import StaffService from '@/services/StaffService';
 
 const container = new Container();
 
@@ -55,5 +57,6 @@ container.bind<IAttributeService>(TYPES.IAttributeService).to(AttributeService);
 container.bind<IBrandNameService>(TYPES.IBrandNameService).to(BrandNameService);
 container.bind<IDashboardService>(TYPES.IDashboardService).to(DashboardService);
 container.bind<IStaffSalaryService>(TYPES.IStaffSalaryService).to(StaffSalaryService);
+container.bind<IStaffService>(TYPES.IStaffService).to(StaffService);
 
 export { container };
