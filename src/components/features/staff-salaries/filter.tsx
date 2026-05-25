@@ -151,6 +151,7 @@ export default function StaffSalaryListFilter<TData>({
           className="h-10 w-full md:max-w-sm"
         />
 
+ 
         <SelectSearch
           buttonClass="w-full md:w-[180px]"
           placeholder="Select Status"
@@ -158,8 +159,7 @@ export default function StaffSalaryListFilter<TData>({
           items={statusList}
           value={status}
           onChange={(value) => {
-            onStatusValueChange(value);
-            setIsFiltered(true);
+            onStatusValueChange(value); 
           }}
         />
 
@@ -170,8 +170,7 @@ export default function StaffSalaryListFilter<TData>({
           items={monthsList}
           value={month}
           onChange={(value) => {
-            onMonthValueChange(value);
-            setIsFiltered(true);
+            onMonthValueChange(value); 
           }}
         />
 
@@ -186,15 +185,10 @@ export default function StaffSalaryListFilter<TData>({
             setIsFiltered(true);
           }}
         />
-
-        <DateRangePicker
-          value={dateRange}
-          onChange={(range) => {
-            setDateRange(range);
-            setIsFiltered(true);
-          }}
-        />
-
+   <div className="overflow-hidden">
+        <DateRangePicker mode="range" value={dateRange} selected={dateRange} onSelect={setDateRange} numberOfMonthsToShow={2} />
+      </div>
+       
         {hasFilters && (
           <Button variant="ghost" onClick={resetFilter} className="h-10 px-4">
             Reset

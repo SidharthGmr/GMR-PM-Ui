@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { ProductAttributeDto } from '@/dtos/product-attribute.dto';
-import { useGetAttributesByProductId, useDeleteProductAttribute, useGetAllProductAttributes } from '@/hooks/service-hooks/useProductAttributeService';
+import {   useDeleteProductAttribute, useGetAllProductAttributes } from '@/hooks/service-hooks/useProductAttributeService';
 import { useCustomDataTable } from '@/hooks/use-custom-table';
 import { useTanstackTablePagination } from '@/hooks/use-tanstack-table-pagination';
 import { useTanstackTableSorting } from '@/hooks/use-tanstack-table-sorting';
@@ -48,8 +48,7 @@ export default function ProductAttributeList({ productId }: ProductAttributeList
     }
   }, [attributesResponse.status, attributesResponse.data]);
 
-  console.log('attributesResponse', attributesResponse);
-
+ 
   const { sorting, onSortingChange } = useTanstackTableSorting<ProductAttributeDto>('', 'desc', columns);
   const { onPaginationChange, pagination } = useTanstackTablePagination(config.recordPerPage);
 
