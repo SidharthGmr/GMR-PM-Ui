@@ -8,6 +8,8 @@ export interface UserDto {
   phone?: string | null;
   email: string;
   password?: string | null;
+  isRegisterbyShop: boolean;
+  storeCode?: string | null;
   role: string;
   roles: RoleDto[] | null;
   isActive: boolean;
@@ -36,6 +38,8 @@ export interface UserBasicDto {
   email: string;
   fullName: string;
   roleName: string;
+  isRegisterbyShop: boolean;
+  storeCode: string | null;
   role: RoleDto[] | null;
   roles: RoleDto[] | null;
   profilePicture: string | null;
